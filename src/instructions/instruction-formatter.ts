@@ -1,4 +1,4 @@
-import { AbcFile, MultinameInfo, MultinameKind, MultinameKindMultiname, MultinameKindMultinameL, MultinameKindQName, MultinameKindRTQName, MultinameKindTypeName, NamespaceInfo, NamespaceKind, NSSetInfo } from "..";
+import { AbcFile, MultinameInfo, MultinameKind, MultinameKindMultiname, MultinameKindMultinameL, MultinameKindQName, MultinameKindRTQName, MultinameKindTypeName, NamespaceInfo, NamespaceKind, NSSetInfo, Structure } from "..";
 import { Instruction } from "./instruction-type";
 
 export class InstructionFormatter {
@@ -13,10 +13,10 @@ export class InstructionFormatter {
         const typeName = NamespaceKind[namespace.kind];
         const name = namespace.name == 0 ? "" : constants.string[namespace.name - 1];
         let subNamespaceIndex = 0;
-        for(let i = 0; i < constants.namespace.length; i++) {
+        for (let i = 0; i < constants.namespace.length; i++) {
             const comparisonNS = constants.namespace[i];
-            if(comparisonNS.kind == namespace.kind && comparisonNS.name == namespace.name) {
-                if(comparisonNS === namespace) {
+            if (comparisonNS.kind == namespace.kind && comparisonNS.name == namespace.name) {
+                if (comparisonNS === namespace) {
                     break;
                 }
                 subNamespaceIndex++;
@@ -30,7 +30,7 @@ export class InstructionFormatter {
     formatNamespaceSet(namespaceSet: NSSetInfo) {
         let str = "[";
 
-        for(const nsIndex of namespaceSet.ns) {
+        for (const nsIndex of namespaceSet.ns) {
             const namespace = this.abcFile.constant_pool.namespace[nsIndex - 1];
             str += this.formatNamespaceInfo(namespace) + ",";
         }
@@ -47,7 +47,7 @@ export class InstructionFormatter {
                 const qnameData = multiname.data as MultinameKindQName;
                 const name = qnameData.name == 0 ? "" : constants.string[qnameData.name - 1];
                 const namespace = qnameData.ns == 0 ? null : constants.namespace[qnameData.ns - 1];
-                
+
                 return `${typeName}(${!!namespace ? this.formatNamespaceInfo(namespace) : "\"null\""}, \"${name}\")`
             }
 
@@ -92,8 +92,47 @@ export class InstructionFormatter {
     }
 
     formatInstruction(instructions: Instruction[]) {
-        for(let instruction in instructions){
-            
+        type Param = { param: any; type: string; }
+        for (let crrIn = 0; crrIn < instructions.length; crrIn++) {
+            var out: string = "";
+            const instruction: Instruction = instructions[crrIn];
+            out = out + `${instruction.name}`;
+            for (let i = 0; i < instruction.params.length; i++) {
+                let param: Param = { param: instruction.params[i], type: instruction.types[i] };
+                switch (param.type) {
+                    case "string":
+                        out = out + ` "${param.param}"`;
+                        break;
+                    case "multiname":
+                        const multiname = param.param as MultinameInfo;
+                        out = out + ` ${this.formatMultinameInfo(multiname)}`;
+                        break;
+                    case "exception_info":
+                        //todo exception_info
+                        break;
+                    case "class_info":
+                        //todo class_info
+                        break;
+                    case "namespace":
+                        const namespace = param.param as NamespaceInfo;
+                        out = out + ` ${this.formatNamespaceInfo(namespace)}`;
+                        break;
+                    case "method":
+                        //todo method
+                        break;
+                    case "u30":
+                    case "offset":
+                    case "s24":
+                    case "u8":
+                    case "int":
+                    case "u_int":
+                        out = out + ` ${param.param}`;
+                        break;
+                    default:
+                        throw new Error(`Undefined Type ${param.type}`);
+                }
+            }
+            console.log(out);
         }
     }
 }
