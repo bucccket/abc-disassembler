@@ -1,5 +1,5 @@
 import { AbcFile, MultinameInfo, MultinameKind, MultinameKindMultiname, MultinameKindMultinameL, MultinameKindQName, MultinameKindRTQName, MultinameKindTypeName, NamespaceInfo, NamespaceKind, NSSetInfo, Structure } from "..";
-import { Instruction } from "./instruction-type";
+import { Instruction } from "./instruction";
 
 export class InstructionFormatter {
     abcFile: AbcFile;
