@@ -1,27 +1,13 @@
-export class InstructionType {
-    id: any;
-    name: any;
+export class Instruction {
+    id: number;
+    name: string;
     params: any[];
+    types: string[];
 
-    constructor(instructionData: any[]) {
-        this.name = "";
-        this.id = "";
-        this.params = [];
-        for (let i = 0; i < instructionData.length; i++) {
-            switch (i) {
-                case 0:
-                    this.name = instructionData[i];
-                    break;
-                case 1:
-                    this.id = instructionData[i];
-                    break;
-                default:
-                    this.params.push(instructionData[i]);
-            }
-        }
-    }
-
-    toString(): string {
-        return `${this.name} ${this.id} ${this.params}`
+    constructor(id: number, name: string, params: any[], types: string[]) {
+        this.id = id;
+        this.name = name;
+        this.params = params;
+        this.types = types;
     }
 }

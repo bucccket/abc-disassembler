@@ -1,4 +1,5 @@
 import { AbcFile, MultinameInfo, MultinameKind, MultinameKindMultiname, MultinameKindMultinameL, MultinameKindQName, MultinameKindRTQName, MultinameKindTypeName, NamespaceInfo, NamespaceKind, NSSetInfo } from "..";
+import { Instruction } from "./instruction-type";
 
 export class InstructionFormatter {
     abcFile: AbcFile;
@@ -90,7 +91,9 @@ export class InstructionFormatter {
         }
     }
 
-    formatInstruction(instruction: any[]) {
-        
+    formatInstruction(instructions: Instruction[]) {
+        for(let instruction in instructions){
+            
+        }
     }
 }

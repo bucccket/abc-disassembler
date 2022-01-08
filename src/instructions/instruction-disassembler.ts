@@ -1,6 +1,6 @@
 import { AbcFile, ExtendedBuffer, MethodBodyInfo } from "..";
 import { instructionMap } from "./instruction-list";
-import { InstructionType } from "./instruction-type";
+import { Instruction } from "./instruction-type";
 
 export class InstructionDisassembler {
     abcFile: AbcFile;
@@ -50,29 +50,27 @@ export class InstructionDisassembler {
         throw new Error(`Unknown type '${type}'`);
     }
 
-    disassemble(method: MethodBodyInfo): InstructionType[] {
+    disassemble(method: MethodBodyInfo): Instruction[] {
         const code = new ExtendedBuffer(Buffer.from(method.code));
-        const pcode_instructions: InstructionType[] = [];
+        const instructions = [];
 
         while (code.bytesAvailable > 0) {
             const instructionId = code.readUInt8();
 
-            const instructionData = instructionMap[instructionId];
+            const instructionData: any[] = instructionMap[instructionId];
 
-            const instruction = [instructionData[0]];
-
+            const params = [];
             const numArgs = instructionData.length - 2;
-
-            if (numArgs < 1) pcode_instructions.push(new InstructionType(instructionData));
 
             for (let i = 0; i < numArgs; i++) {
                 const argType = instructionData[i + 2];
-                const type = this.readType(argType, code, instruction);
-                instruction.push(type);
-                pcode_instructions.push(new InstructionType([instruction[i], instructionId, type]));
+                const type = this.readType(argType, code, params);
+                params.push(type);
             }
+
+            instructions.push(new Instruction(instructionId, instructionData[0], params, instructionData.slice(2)));
         }
-        console.log(pcode_instructions);
-        return pcode_instructions;
+
+        return instructions;
     }
 }
