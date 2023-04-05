@@ -35,7 +35,8 @@ for (const tag of swf.tags) {
                     break;
                 }
                 const pcode = disassembler.disassemble(methodBody);
-                instructionFormatter.formatInstruction(pcode);
+                const out = instructionFormatter.formatInstruction(pcode);
+                console.log(`DATA:\n${out}`);
             }
         }
     }

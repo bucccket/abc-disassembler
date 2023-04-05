@@ -91,8 +91,9 @@ export class InstructionFormatter {
         }
     }
 
-    formatInstruction(instructions: Instruction[]) {
+    formatInstruction(instructions: Instruction[]):string {
         type Param = { param: any; type: string; }
+        var res = "";
         for (let crrIn = 0; crrIn < instructions.length; crrIn++) {
             var out: string = "";
             const instruction: Instruction = instructions[crrIn];
@@ -132,7 +133,8 @@ export class InstructionFormatter {
                         throw new Error(`Undefined Type ${param.type}`);
                 }
             }
-            console.log(out);
+            res = res + out + "\n";
         }
+        return res;
     }
 }
