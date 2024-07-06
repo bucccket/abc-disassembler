@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://www.github.com/itselectroz/abc-disassembler"
+    "url": "https://www.github.com/bucccket/abc-disassembler"
   },
-  "author": "Harry Whittle",
+  "author": "Harry Whittle, bucccket",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^17.0.8",
