@@ -19,7 +19,7 @@ export enum MultinameKind {
 
 "ignore"
 export class MultinameInfo extends Structure {
-    kind: MultinameKind = 0;
+    kind: MultinameKind|null = null;
     data: MultinameKindQName | MultinameKindRTQName | MultinameKindRTQNameL | MultinameKindMultiname | MultinameKindMultinameL | MultinameKindTypeName = null as any;
 
     static read(data: ExtendedBuffer): MultinameInfo {
@@ -60,7 +60,7 @@ export class MultinameInfo extends Structure {
     }
 
     write(data: ExtendedBuffer) {
-        data.writeUInt8(this.kind);
+        data.writeUInt8(this.kind ?? 0);
         this.data.write(data);
     }
 }
