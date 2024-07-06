@@ -5,7 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "ttsc"
+    "build": "ttsc",
+    "prepublish": "npm run build",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
